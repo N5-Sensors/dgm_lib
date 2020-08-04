@@ -191,3 +191,69 @@ float DGM::getVoltege2() {
   return value;
 
 }
+
+float DGM::getCalibratedValue1() {
+  unsigned char received[4];
+  float value;
+  Wire.beginTransmission(_addr);
+  Wire.write(PACKET_CALIBRATED_VALUE1_POS);
+  Wire.endTransmission();
+  Wire.requestFrom(_addr, (uint8_t)4);
+  unsigned int aux = 0;
+  while ( aux < sizeof(received) && Wire.available() > 0 )
+  {
+    received[aux] = Wire.read();
+    //Serial.print(received[aux], HEX);
+    aux++;
+  }
+  memcpy(&value, received, 4);
+
+  return value;
+
+}
+
+float DGM::getCalibratedValue2() {
+  unsigned char received[4];
+  float value;
+  Wire.beginTransmission(_addr);
+  Wire.write(PACKET_CALIBRATED_VALUE2_POS);
+  Wire.endTransmission();
+  Wire.requestFrom(_addr, (uint8_t)4);
+  unsigned int aux = 0;
+  while ( aux < sizeof(received) && Wire.available() > 0 )
+  {
+    received[aux] = Wire.read();
+    //Serial.print(received[aux], HEX);
+    aux++;
+  }
+  memcpy(&value, received, 4);
+
+  return value;
+
+}
+
+
+void DGM::setCoeficients(float* coeficients) {
+  
+  Wire.beginTransmission(_addr);
+  Wire.write(PACKET_COEFFICIENT0_POS);
+  for(uint8_t i =0 ; i < 15; i++){
+    uint8_t toSend[4];
+    memcpy(toSend,&coeficients[i],4)
+    for (uint8_t a = 0; a < 3; a++)
+    {
+      Wire.write(toSend[a]);
+    }
+  }
+  Wire.endTransmission();
+
+  Wire.beginTransmission(_addr);
+  Wire.write(PACKET_CONFIG_POS);
+  Wire.write((byte)0x8A);
+  Wire.endTransmission();
+  uint8_t value = getConfig();
+  while( (value & CONFIG_CMD_MASK) ){
+    value = getConfig();
+    delay(10);
+  }
+}
