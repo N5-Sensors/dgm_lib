@@ -47,6 +47,7 @@ class DGM
     void setAdcBufferSize(uint8_t value);
     void calibrateBridge1();
     void calibrateBridge2();
+    void getUid(uint8_t *uid);
     float getCalibratedValue();
     uint8_t _addr = 0x55;
 };
