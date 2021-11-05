@@ -12,7 +12,9 @@
 #define PACKET_TEMPERATURE_POS      (PACKET_B2_POS+4u)
 #define PACKET_HUMIDITY_POS         (PACKET_TEMPERATURE_POS+4u)
 #define PACKET_UID_POS              (PACKET_HUMIDITY_POS+4u)
-#define PACKET_CALIBRATED_VALUE     (PACKET_UID_POS+8u)
+#define PACKET_RTD_POS              (PACKET_UID_POS+8u)
+#define PACKET_CALIBRATED_VALUE     (PACKET_RTD_POS+4u)
+
 
 #define DGM_ADC_BUFFER_SIZE_1 0x00
 #define DGM_ADC_BUFFER_SIZE_10 0x01
@@ -38,6 +40,7 @@ class DGM
     float getHumidity();
     float getVoltege1();
     float getVoltege2();
+    float getRtdResistance();
     uint8_t getConfig();
     void setPwm(uint8_t value);
     void setI2cAddr(uint8_t value);
