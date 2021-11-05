@@ -212,6 +212,26 @@ float DGM::getRtdResistance() {
 
 }
 
+float DGM::getLedVoltage() {
+  unsigned char received[4];
+  float value;
+  Wire.beginTransmission(_addr);
+  Wire.write(PACKET_LED_VOLTAGE);
+  Wire.endTransmission();
+  Wire.requestFrom(_addr, (uint8_t)4);
+  unsigned int aux = 0;
+  while ( aux < sizeof(received) && Wire.available() > 0 )
+  {
+    received[aux] = Wire.read();
+    //Serial.print(received[aux], HEX);
+    aux++;
+  }
+  memcpy(&value, received, 4);
+
+  return value;
+
+}
+
 void DGM::getUid(uint8_t *uid) {
 
   Wire.beginTransmission(_addr);
